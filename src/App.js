@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Header from "./Header";
+import Home from "./Home";
+import Checkout from "./Checkout";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Login from "./Login";
+import Payment from './Payment';
+import Orders from './Orders';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App (){
+    const stripePromise = loadStripe('STRIPE_PUBLISHABLE_API_KEY');
+
+    return (
+        <Router>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<><Header /><Home /></>}>
+                    </Route>
+                    <Route path="/login" element={<Login />}>
+                    </Route>
+                    <Route path="/checkout" element={<><Header /><Checkout /></>}>
+                    </Route>
+                    <Route path="/payment" element={<><Header /><Elements stripe={stripePromise}><Payment /></Elements></>}>
+                    </Route>
+                    <Route path="/orders" element={<><Header /><Orders /></>}>
+                    </Route>
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
